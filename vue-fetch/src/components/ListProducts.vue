@@ -23,7 +23,7 @@
     <tr v-for="product in filtredProducts" :key="product.id">
       <th>{{product.id}}</th>
       <td><img :src="product.image" alt="product.title" width="100" height="100"></td>
-      <td>{{product.title}}</td>
+      <td><router-link v-bind:to="'/product/'+product.id">{{product.title}}</router-link></td> 
       <td>{{product.description}}</td>
       <td>{{product.price}}</td>
       <td>{{ product.category}}</td>
