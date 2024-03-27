@@ -51,7 +51,7 @@ created(){
   fetch("https://fakestoreapi.com/products/"+self.id, {
     method: "GET",
     headers: {
-      "Content-Type": "content/type"
+      "Content-Type": "application/json"
     },
   }).then((response) => response.json())
     .then((function (json) {

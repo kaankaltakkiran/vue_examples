@@ -22,7 +22,6 @@
 <tr>
   <th>{{user.id}}</th>
   <td>{{user.email}}</td>
-      <!--   <td><router-link v-bind:to="'/blog/'+blog.id">{{blog.title}}</router-link></td> -->
   <td>{{user.username}}</td>
   <td>{{user.name.firstname}}</td>
   <td>{{user.name.lastname}}</td>
