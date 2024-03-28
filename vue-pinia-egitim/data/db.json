@@ -1,0 +1,22 @@
+{
+  "diary": [
+    {
+      "id": "1",
+      "diary": "dsada",
+      "date": "11.6.2023",
+      "isFavorite": true
+    },
+    {
+      "id": 2,
+      "diary": "kaan",
+      "date": "28.03.2024",
+      "isFavorite": false
+    },
+    {
+      "id": 3,
+      "diary": "kaanbaba",
+      "date": "28.03.2024",
+      "isFavorite": false
+    }
+  ]
+}

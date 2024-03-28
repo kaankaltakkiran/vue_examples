@@ -50,6 +50,9 @@ import NewDiary from './components/NewDiary.vue'
     /*   import ettiğimiz storu kullanmak için değişken oluşturuyoruz. */
       const diaryStore = useDiaryStore();
       const filter = ref('all');
+   /*    json ile veriyi çağırma işlemi yapıyoruz.  */
+      diaryStore.fetchDiary();
+    /*   return ile değişkenleri dışarıya döndürüyoruz. */
       return {
         diaryStore,
         filter

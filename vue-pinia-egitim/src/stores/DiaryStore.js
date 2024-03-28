@@ -6,11 +6,8 @@ import { defineStore } from 'pinia'
 //! ilk parametre store adı, ikinci parametre store objesi
 export const useDiaryStore = defineStore("diaryStore",{
   state:()=>({
-    diary:[
-      {id:1, diary:"Diary 1", date:"2021-09-01", isFavorite:false},
-      {id:2, diary:"Diary 2", date:"2021-09-02", isFavorite:true},
-      {id:3, diary:"Diary 3", date:"2021-09-03", isFavorite:true},
-    ]
+    diary: [],
+    loading:false
   }),
   /* state içindeki verileri değiştirmek için  kullanılır */
   getters:{
@@ -29,21 +26,49 @@ export const useDiaryStore = defineStore("diaryStore",{
   },
  /*  state içindeki verileri değiştirmek için  kullanılır */
   actions:{
+   /*  jsondan gelen version */
+  /*  async çünkü paralel işlem yapılabilir */
+  async fetchDiary(){
+    this.loading=true;
+    /*  fetch ile json dosyası getirilir */
+    const response=await fetch('http://localhost:3000/diary');
+    /*  json dosyası okunur */
+    const data=await response.json();
+    /*  json dosyasındaki verileri döndürür */
+    this.diary=data;
+    this.loading=false;
+  },
    /*  yeni günlük ekleme */
-    newDiary(diary){
+   async newDiary(diary){
      this.diary.push(diary);
+     const response=await fetch('http://localhost:3000/diary',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify(diary)
+     }).catch(err=>console.log(err));
     },
    /*  fav için */
-   toggleFav(id){
+   async toggleFav(id){
    /*  parametredki id ile diary bulunur */
     const diary=this.diary.find(diary=>diary.id===id);
   /*   diary durumunu değiştirme */
     diary.isFavorite=!diary.isFavorite;
+    const res = await fetch("http://localhost:3000/diary/" + id, {
+      
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({isFavorite: diary.isFavorite})
+  }).catch((err)=>{console.log(err)});
     },
     /*  günlük silme */
-    deleteDiary(id){
+    async deleteDiary(id){
       /*  id si verilen diaryi siler */
       this.diary=this.diary.filter(diary=>diary.id!==id)
-  }
-  }
+      const response = await fetch("http://localhost:3000/diary/" + id, {
+        method: 'DELETE'
+    }).catch((err)=>{console.log(err)})
+
+  }}
 })
