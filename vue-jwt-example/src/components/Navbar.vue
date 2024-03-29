@@ -24,8 +24,24 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
+import { computed } from 'vue';
 export default{
   name: 'Navbar',
+  setup(){
+const authStore= useAuthStore();
+const auth = computed(() => authStore.authenticated);
+const logout=async()=>{
+  await fetch('http://localhost:5173/api/logout',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json'
+    },
+    credentials: 'include',
+  });
+}
+return {auth,logout}
+  }
 }
 </script>
 
