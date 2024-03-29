@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router';
         await router.push('/');
         console.log(data);
       }
-      return {data};
+      return {data,submit};
     }
   }
 </script>
