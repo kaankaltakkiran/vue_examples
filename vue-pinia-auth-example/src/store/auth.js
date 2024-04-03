@@ -35,6 +35,5 @@ export const useAuthStore = defineStore({
       return state.user;
     },
   },
-//locale kaydetme
-  persist: true,
+  persist: true, //locale kaydetme
 });
