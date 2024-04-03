@@ -6,7 +6,6 @@
 <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
 <table class="table table-striped">
 <thead>
   <tr>
@@ -26,7 +25,6 @@
     <td>{{product.description}}</td>
     <td>{{product.price}}</td>
     <td>{{ product.category}}</td>
-    
   </tr>
 </tbody>
 </table>
@@ -34,40 +32,29 @@
 </div>
 </template>
 
-<script>
-export default {
-data() {
-  return {
-    product: [],
-    id: this.$route.params.id,
-    keyword: '',
-    loading: true,
-    errored: false 
-  }
-},
-created(){
-  // instance bilgilerini al 
-  var self = this;
-  fetch("https://fakestoreapi.com/products/"+self.id, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    },
-  }).then((response) => response.json())
-    .then((function (json) {
-      console.log(json);
-      self.product = json;
-      self.loading = false;
-    }))
-    .catch((function (err) {
-      console.log(err);
-      self.loading = false;
-      self.errored = true;
-    }));
-}
-}
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
+const product = ref({});
+const id = ref('');
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const route = useRoute();
+const fetchData = () => {
+  fetch(`https://fakestoreapi.com/products/${route.params.id}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      product.value = data;
+      loading.value = false;
+    })
+    .catch(error => {
+      console.error(error);
+      errored.value = true;
+    });
+};
+onMounted(() => {
+  fetchData();
+});
 </script>
-
-<style scoped>
-</style>
-

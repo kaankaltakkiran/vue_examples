@@ -7,7 +7,6 @@
   <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
   <table class="table table-striped">
   <thead>
     <tr>
@@ -27,7 +26,6 @@
       <td>{{user.name.firstname}}</td>
       <td>{{user.name.lastname}}</td>
       <td>{{ user.phone}}</td>
-      
     </tr>
   </tbody>
 </table>
@@ -35,43 +33,35 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      users: [],
-      keyword: '',
-      loading: true,
-      errored: false 
-    }
-  },
-  computed: {
-    filtredUsers() {
-      return this.users.filter((user) => {
-        return user.username.toLowerCase().includes(this.keyword.toLowerCase());
-      });
-    }
-  },
-  created(){
-    var self = this;
-    fetch("https://fakestoreapi.com/users",{
-      method:"GET",
-      headers:{
-        "Content-Type":"content/type"
-      },
-    }).then((response)=>response.json())
-    .then((function(json){
+<script setup>
+import { ref, computed,onMounted } from 'vue';
+const users = ref([]);
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const filtredUsers = computed(() => {
+  return users.value.filter((user) => {
+    return user.username.toLowerCase().includes(keyword.value.toLowerCase());
+  });
+});
+const fecthData=()=>{
+  fetch("https://fakestoreapi.com/users", {
+    method: "GET",
+    headers: {
+      "Content-Type": "content/type"
+    },
+  }).then((response) => response.json())
+    .then((function (json) {
       console.log(json);
-      self.users = json;
-      self.loading = false;
+      users.value = json;
+      loading.value = false;
     }))
-    .catch((error)=>{
-      console.log(error);
-      self.errored = true;
-    })
-  }
-}
+    .catch((function (err) {
+      console.log(err);
+      errored.value = true;
+    }));
+};
+onMounted(() => {
+  fecthData();
+});
 </script>
-
-<style scoped>
-</style>

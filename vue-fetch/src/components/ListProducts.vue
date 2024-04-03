@@ -7,7 +7,6 @@
   <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
   <table class="table table-striped">
   <thead>
     <tr>
@@ -27,7 +26,6 @@
       <td>{{product.description}}</td>
       <td>{{product.price}}</td>
       <td>{{ product.category}}</td>
-      
     </tr>
   </tbody>
 </table>
@@ -35,46 +33,36 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      products: [],
-      keyword: '',
-      loading: true,
-      errored: false 
-    }
-  },
-  computed: {
-    filtredProducts() {
-      return this.products.filter((product) => {
-        return product.title.toLowerCase().includes(this.keyword.toLowerCase());
-      });
-    }
-  },
-  created(){
-    // instance bilgilerini al 
-    var self = this;
-    fetch("https://fakestoreapi.com/products", {
-      method: "GET",
-      headers: {
-        "Content-Type": "content/type"
-      },
-    }).then((response) => response.json())
-      .then((function (json) {
-        console.log(json);
-        self.products = json;
-        self.loading = false;
-      }))
-      .catch((function (err) {
-        console.log(err);
-        self.loading = false;
-        self.errored = true;
-      }));
-  }
+<script setup>
+import { ref, computed,onMounted } from 'vue';
+const products = ref([]);
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const filtredProducts = computed(() => {
+  return products.value.filter((product) => {
+    return product.title.toLowerCase().includes(keyword.value.toLowerCase());
+  });
+});
+const fecthData=()=>{
+  fetch("https://fakestoreapi.com/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "content/type"
+    },
+  }).then((response) => response.json())
+    .then((function (json) {
+      console.log(json);
+      products.value = json;
+      loading.value = false;
+    }))
+    .catch((function (err) {
+      console.log(err);
+      loading.value = false;
+      errored.value = true;
+    }));
 }
+onMounted(() => {
+  fecthData();
+});
 </script>
-
-<style scoped>
-</style>
-
