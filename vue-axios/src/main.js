@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 //!import App.vue
 import App from './App.vue'
 //!import router
-import router from "./routes";
+import router from "./routes/routes";
 //!import axios
 import axios from 'axios'
 import VueAxios from 'vue-axios'

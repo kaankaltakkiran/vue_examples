@@ -7,7 +7,6 @@
   <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
   <table class="table table-striped">
   <thead>
     <tr>
@@ -20,14 +19,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="product in filtredProducts" :key="product.id">
+    <tr v-for="product in filteredProducts" :key="product.id">
       <th>{{product.id}}</th>
       <td><img :src="product.image" alt="product.title" width="100" height="100"></td>
       <td><router-link v-bind:to="'/product/'+product.id">{{product.title}}</router-link></td> 
       <td>{{product.description}}</td>
       <td>{{product.price}}</td>
       <td>{{ product.category}}</td>
-      
     </tr>
   </tbody>
 </table>
@@ -35,41 +33,38 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      products: [],
-      keyword: '',
-      loading: true,
-      errored: false 
-    }
-  },
-  computed: {
-    filtredProducts() {
-      return this.products.filter((product) => {
-        return product.title.toLowerCase().includes(this.keyword.toLowerCase());
-      });
-    }
-  },
-  created(){
-    this.axios.get('https://fakestoreapi.com/products/')
-    .then(response=>{
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+
+const products = ref([]);
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+
+const filteredProducts = computed(() => {
+  return products.value.filter(product => {
+    return product.title.toLowerCase().includes(keyword.value.toLowerCase());
+  });
+});
+
+const fetchData = () => {
+  axios.get('https://fakestoreapi.com/products/')
+    .then(response => {
       console.log(response);
-      this.products=response.data;
+      products.value = response.data;
     })
-    .catch(error=>{
-      console.log(error);
-      this.errored = true;
+    .catch(error => {
+      console.error(error);
+      errored.value = true;
     })
-    .finally(()=>{
+    .finally(() => {
       console.log('Request completed');
-      this.loading = false;
-    })
-  }
-  }
+      loading.value = false;
+    });
+};
+
+onMounted(() => {
+  fetchData();
+});
 </script>
-
-<style scoped>
-</style>
-

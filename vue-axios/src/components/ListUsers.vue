@@ -7,7 +7,6 @@
   <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
   <table class="table table-striped">
   <thead>
     <tr>
@@ -27,7 +26,6 @@
       <td>{{user.name.firstname}}</td>
       <td>{{user.name.lastname}}</td>
       <td>{{ user.phone}}</td>
-      
     </tr>
   </tbody>
 </table>
@@ -35,40 +33,32 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      users: [],
-      keyword: '',
-      loading: true,
-      errored: false 
-    }
-  },
-  computed: {
-    filtredUsers() {
-      return this.users.filter((user) => {
-        return user.username.toLowerCase().includes(this.keyword.toLowerCase());
-      });
-    }
-  },
-  created(){
-    this.axios.get('https://fakestoreapi.com/users/')
-    .then(response=>{
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+const users = ref([]);
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const filtredUsers = computed(() => {
+  return users.value.filter(user => {
+    return user.username.toLowerCase().includes(keyword.value.toLowerCase());
+  });
+});
+const fetchData = () => {
+  axios.get('https://fakestoreapi.com/users/')
+    .then(response => {
       console.log(response);
-      this.users=response.data;
+      users.value = response.data;
+      loading.value = false;
     })
-    .catch(error=>{
-      console.log(error);
-      this.errored = true;
-    })
-    .finally(()=>{
-      console.log('Request completed');
-      this.loading = false;
-    })
-  }
-}
-</script>
+    .catch(error => {
+      console.error(error);
+      errored.value = true;
+    });
+};
+    onMounted(() => {
+      fetchData();
+    });
 
-<style scoped>
-</style>
+</script>

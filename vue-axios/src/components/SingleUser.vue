@@ -6,15 +6,12 @@
 <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
 <table class="table table-striped">
 <thead>
 <tr>
   <th>id</th>
   <th>email</th>
   <th>username</th>
-  <th>firstname</th>
-  <th>lastname</th>
   <th>phone</th>
 </tr>
 </thead>
@@ -23,8 +20,6 @@
   <th>{{user.id}}</th>
   <td>{{user.email}}</td>
   <td>{{user.username}}</td>
-  <td>{{user.name.firstname}}</td>
-  <td>{{user.name.lastname}}</td>
   <td>{{ user.phone}}</td>
 </tr>
 </tbody>
@@ -33,33 +28,31 @@
 </div>
 </template>
 
-<script>
-export default {
-data() {
-return {
-  user: [],
-  id: this.$route.params.id,
-  loading: true,
-  errored: false 
-}
-},
-created(){
-  this.axios.get('https://fakestoreapi.com/users/'+this.id)
-    .then(response=>{
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+const user = ref({});
+const id = ref('');
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const route = useRoute();
+const fetchData = () => {
+  axios.get(`https://fakestoreapi.com/users/${route.params.id}`)
+    .then(response => {
       console.log(response);
-      this.user=response.data;
+      user.value = response.data;
+      console.log(user.value);
+      console.log(user.value.address.city);
+      loading.value = false;
     })
-    .catch(error=>{
-      console.log(error);
-      this.errored = true;
-    })
-    .finally(()=>{
-      console.log('Request completed');
-      this.loading = false;
-    })
-}
-}
+    .catch(error => {
+      console.error(error);
+      errored.value = true;
+    });
+};
+onMounted(() => {
+  fetchData();
+});
 </script>
-
-<style scoped>
-</style>

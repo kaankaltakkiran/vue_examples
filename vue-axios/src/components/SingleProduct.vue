@@ -6,7 +6,6 @@
 <p v-if="loading">Loading...</p>
 <div class="alert alert-danger " v-else-if="errored">An error occurred</div>
 </div>
-
 <table class="table table-striped">
 <thead>
   <tr>
@@ -26,7 +25,6 @@
     <td>{{product.description}}</td>
     <td>{{product.price}}</td>
     <td>{{ product.category}}</td>
-    
   </tr>
 </tbody>
 </table>
@@ -34,35 +32,29 @@
 </div>
 </template>
 
-<script>
-export default {
-data() {
-  return {
-    product: [],
-    id: this.$route.params.id,
-    keyword: '',
-    loading: true,
-    errored: false 
-  }
-},
-created(){
-  this.axios.get('https://fakestoreapi.com/products/'+this.id)
-    .then(response=>{
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router'; // useRoute hook'unu import edin
+const product = ref([]);
+const id = ref('');
+const keyword = ref('');
+const loading = ref(true);
+const errored = ref(false);
+const route = useRoute(); // useRoute hook'unu kullanarak route bilgisine erişin
+const fetchData = () => {
+  axios.get(`https://fakestoreapi.com/products/${route.params.id}`)
+    .then(response => {
       console.log(response);
-      this.product=response.data;
+      product.value = response.data;
+      loading.value = false;
     })
-    .catch(error=>{
-      console.log(error);
-      this.errored = true;
-    })
-    .finally(()=>{
-      console.log('Request completed');
-      this.loading = false;
-    })
-}
-}
+    .catch(error => {
+      console.error(error);
+      errored.value = true;
+    });
+};
+onMounted(() => {
+  fetchData();
+});
 </script>
-
-<style scoped>
-</style>
-
