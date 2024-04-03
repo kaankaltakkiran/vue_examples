@@ -8,27 +8,23 @@ import { onMounted, ref } from 'vue';
   export default {
     name: 'Home',
     setup(){
-      
       const message=ref('You are not logged in');
       const authStore = useAuthStore();
-      /*  sayfa yüklendiğinde çalışır. */
-     onMounted(async() => {
+     onMounted(() => { //componentin oluşturulduğunda çalışır.
     try {
-      const response= await fetch('http://localhost:5173/api/user',{
+      const response=  fetch('http://localhost:5173/api/user',{
           headers:{
             'Content-Type':'application/json'
           },
           credentials: 'include',
         });
-      /*   gelen veriler */
-       /*  JSON formatından JavaScript nesnesine dönüştürülür. */
-        const content= await response.json();
+        const content=response.json(); //response nesnesini json formatına çevirir.
 
-        message.value=`Welcome ${content.name}`;
-        await authStore.setAuth(true);
+        message.value=`Welcome ${content.name}`; //message değerine content.name değeri atandı.
+         authStore.setAuth(true); //authStore içindeki setAuth fonksiyonu çağrıldı.
         console.log(authStore.authenticated);
     }  catch (error) {
-      await authStore.setAuth(false);
+      authStore.setAuth(false); //authStore içindeki setAuth fonksiyonu çağrıldı.
     }
      });
       return {message};
