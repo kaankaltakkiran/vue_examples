@@ -35,30 +35,22 @@
 </template> 
 
 <script>
-/* refrans import ediyoruz. */
-import {ref} from 'vue'
-/* stores oluşturduğumuz yapıyı import ediyoruz. */
-import {useDiaryStore} from './stores/DiaryStore'
-/* günlük detay için import */
-import DiaryDetails from './components/DiaryDetails.vue'
-/* yeni günlük ekleme için import  */
-import NewDiary from './components/NewDiary.vue'
-/* storeToRefs import ediyoruz. */
-import { storeToRefs } from 'pinia';
+import {ref} from 'vue' // ref import ediyoruz.
+import {useDiaryStore} from './stores/DiaryStore' // store import ediyoruz.
+import DiaryDetails from './components/DiaryDetails.vue' // günlük detayları için import ediyoruz.
+import NewDiary from './components/NewDiary.vue' // yeni günlük eklemek için import ediyoruz.
+import { storeToRefs } from 'pinia'; // storeToRefs import ediyoruz.
   export default {
   components: {
     "diary-details": DiaryDetails,
     "new-diary": NewDiary
   },
     setup(){
-    /*   import ettiğimiz storu kullanmak için değişken oluşturuyoruz. */
-      const diaryStore = useDiaryStore();
-    /*   storeToRefs ile store değişkenlerini dışarıya çıkartıyoruz. */
-      const { diary, loading, favs, totalCount, favCount } = storeToRefs(diaryStore)
+      const diaryStore = useDiaryStore(); // store kullanımı için tanımlıyoruz.
+      const { diary, loading, favs, totalCount, favCount } = storeToRefs(diaryStore) // storeToRefs ile store değişkenlerini tanımlıyoruz.
       const filter = ref('all');
-   /*    json ile veriyi çağırma işlemi yapıyoruz.  */
-      diaryStore.fetchDiary();
-    /*   return ile değişkenleri dışarıya döndürüyoruz. */
+      diaryStore.fetchDiary(); // store içindeki fetchDiary fonksiyonunu çağırıyoruz.
+      // return ile store değişkenlerini dışarıya döndürüyoruz.
       return {
         diaryStore,
         filter,
@@ -67,7 +59,7 @@ import { storeToRefs } from 'pinia';
         favs,
         totalCount,
         favCount
-    }
+    } 
   }
 }
 </script>

@@ -9,52 +9,40 @@ export const useDiaryStore = defineStore("diaryStore",{
     diary: [],
     loading:false
   }),
-  /* state içindeki verileri değiştirmek için  kullanılır */
+  //state içindeki verileri değiştirmek için  kullanılır 
   getters:{
     favs(){
-    /*   diarydeki favori olanları getirir */
-      return this.diary.filter(diary=>diary.isFavorite)
+      return this.diary.filter(diary=>diary.isFavorite) //favori olanları getirir
     },
     favCount(){
-     /*  toplam favori sayısını getirir */
-      return this.diary.filter(diary=>diary.isFavorite).length
+      return this.diary.filter(diary=>diary.isFavorite).length //favori olanların sayısını getirir
   },
   totalCount: (state) =>{
-     /*  toplam diary sayısını getirir */
-      return state.diary.length
+      return state.diary.length //tüm günlüklerin sayısını getirir
   }
   },
- /*  state içindeki verileri değiştirmek için  kullanılır */
+    //state içindeki verileri değiştirmek için  kullanılır
   actions:{
-   /*  jsondan gelen version */
-  /*  async çünkü paralel işlem yapılabilir */
-  async fetchDiary(){
+  async fetchDiary(){ //günlükleri getirir
     this.loading=true;
-    /*  fetch ile json dosyası getirilir */
     const response=await fetch('http://localhost:3000/diary');
-    /*  json dosyası okunur */
-    const data=await response.json();
-    /*  json dosyasındaki verileri döndürür */
-    this.diary=data;
-    this.loading=false;
+    const data=await response.json(); //json formatında veri döner
+    this.diary=data; //gelen veriyi state içindeki diarye atar
+    this.loading=false; 
   },
-   /*  yeni günlük ekleme */
-   async newDiary(diary){
+   async newDiary(diary){ //yeni günlük ekler
      this.diary.push(diary);
      const response=await fetch('http://localhost:3000/diary',{
         method:'POST',
         headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify(diary)
+        body:JSON.stringify(diary) //gelen veriyi json formatına çevirir
      }).catch(err=>console.log(err));
     },
-   /*  fav için */
-   async toggleFav(id){
-   /*  parametredki id ile diary bulunur */
-    const diary=this.diary.find(diary=>diary.id===id);
-  /*   diary durumunu değiştirme */
-    diary.isFavorite=!diary.isFavorite;
+   async toggleFav(id){ //favori durumunu değiştirir
+    const diary=this.diary.find(diary=>diary.id===id); //id si verilen günlüğü bulur
+    diary.isFavorite=!diary.isFavorite; //favori durumunu değiştirir
     const res = await fetch("http://localhost:3000/diary/" + id, {
       
       method: 'PATCH',
@@ -62,13 +50,10 @@ export const useDiaryStore = defineStore("diaryStore",{
       body: JSON.stringify({isFavorite: diary.isFavorite})
   }).catch((err)=>{console.log(err)});
     },
-    /*  günlük silme */
-    async deleteDiary(id){
-      /*  id si verilen diaryi siler */
+    async deleteDiary(id){ //id si verilen günlüğü siler
       this.diary=this.diary.filter(diary=>diary.id!==id)
       const response = await fetch("http://localhost:3000/diary/" + id, {
         method: 'DELETE'
     }).catch((err)=>{console.log(err)})
-
   }}
 })

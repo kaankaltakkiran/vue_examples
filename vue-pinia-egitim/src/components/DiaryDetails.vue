@@ -14,12 +14,9 @@
 <script>
 import {useDiaryStore} from '../stores/DiaryStore'
   export default {
- /*    ana bileşenden gelen propsu alıyoruz. */
-    props: ['diarylist'],
+    props: ['diarylist'], // props ile dışarıdan gelen veriyi alıyoruz.
     setup(){
-     /*  oluşturduğumuz storu çağırma */
-     const diaryStore = useDiaryStore();
-
+     const diaryStore = useDiaryStore();  // store kullanımı için tanımlıyoruz.
      return {
        diaryStore 
      }

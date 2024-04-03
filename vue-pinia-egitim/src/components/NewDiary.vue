@@ -14,12 +14,9 @@ import {useDiaryStore} from '../stores/DiaryStore'
 import {ref} from 'vue'
   export default {
     setup(){
-  /*     storedaki günlük için */
-      const diaryStore = useDiaryStore();
-   /*    yeni günlük için */
-      const newDiary = ref('');
-      // form submit
-      const sendForm = () => {
+      const diaryStore = useDiaryStore(); // store kullanımı için tanımlıyoruz.
+      const newDiary = ref(''); // yeni günlük eklemek için ref tanımlıyoruz.
+      const sendForm = () => { // form gönderme fonksiyonu
        if(newDiary.value.length > 0){
          diaryStore.newDiary({
           id:diaryStore.diary.length + 1,
