@@ -7,31 +7,21 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     login(token) {
-      // Tokeni base64 ile kodla
-      const encodedToken = btoa(token);
-      
+      const encodedToken = btoa(token);       // Tokeni base64 ile kodla
       this.token = encodedToken;
-
-      // Decode token to get user information
       const decodedToken = JSON.parse(atob(encodedToken.split('.')[1]));
       this.username = decodedToken.username;
-
-      // Save token to localStorage
-      localStorage.setItem('token', encodedToken);
+      localStorage.setItem('token', encodedToken); // Save token to localStorage
     },
     logout() {
       this.token = null;
       this.username = null;
-
-      // Clear token from localStorage
-      localStorage.removeItem('token');
+      localStorage.removeItem('token'); // Remove token from localStorage
     },
-    // Initialize state from localStorage if token exists
     initialize() {
-      const encodedToken = localStorage.getItem('token');
+      const encodedToken = localStorage.getItem('token'); // Get token from localStorage
       if (encodedToken) {
-        // Decode token to get original token
-        const decodedToken = atob(encodedToken);
+        const decodedToken = atob(encodedToken); // Decode token
         this.login(decodedToken);
       }
     }

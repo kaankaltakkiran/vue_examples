@@ -1,7 +1,7 @@
 // main.js
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';// Pinia'yı içe aktarın
+import router from './routes/router';
 import 'bootstrap/dist/css/bootstrap.css';
 
 //! Pinia eklemek için
