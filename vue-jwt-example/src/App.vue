@@ -1,17 +1,12 @@
 <template>
-<app-navbar></app-navbar>
+<appNavbar></appNavbar>
   <main class="form-signin">
 <router-view></router-view>
 </main>
 </template>
 
-<script>
-import NavbarVue from './components/Navbar.vue'
-export default {
-  components:{
-    "app-navbar": NavbarVue
-  }
-}
+<script setup>
+import appNavbar from './components/Navbar.vue';
 </script>
 
 <style>
