@@ -8,21 +8,15 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthService from '../services/auth.service';
-
-export default {
-  data() {
-    return {
-      user: AuthService.getCurrentUser(),
-      accessToken: AuthService.getCurrentUser() ? AuthService.getCurrentUser().accessToken : null
-    };
-  },
-  methods: {
-    handleLogout() {
-      AuthService.logout();
-      this.$router.push('/login');
-    }
-  }
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const user = ref(AuthService.getCurrentUser());
+const accessToken = ref(AuthService.getCurrentUser() ? AuthService.getCurrentUser().accessToken : null);
+const router = useRouter();
+const handleLogout = () => {
+  AuthService.logout();
+  router.push('/login');
 };
 </script>

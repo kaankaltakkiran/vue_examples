@@ -12,14 +12,13 @@ class AuthService {
       throw new Error('Invalid username or password');
     }
   }
-/*   çıkış yapınca tokeni siler */
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('user'); // Kullanıcıyı çıkış yaparken tarayıcıdan siler.
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));
+    return JSON.parse(localStorage.getItem('user')); // Kullanıcı bilgilerini döndürür.
   }
 }
 
-export default new AuthService();
+export default new AuthService(); 

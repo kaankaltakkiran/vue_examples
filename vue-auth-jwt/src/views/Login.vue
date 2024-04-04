@@ -17,28 +17,22 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import AuthService from '../services/auth.service';
-
-export default {
-  data() {
-    return {
-      username: '',
-      password: ''
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        const user = await AuthService.login({
-          username: this.username,
-          password: this.password
-        });
-        this.$router.push('/');
-      } catch (error) {
-        console.error(error);
-      }
-    }
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const username = ref('');
+const password = ref('');
+const router = useRouter();
+const handleLogin = async () => {
+  try {
+    const user = await AuthService.login({
+      username: username.value,
+      password: password.value
+    });
+    router.push('/');
+  } catch (error) {
+    console.error(error);
   }
 };
 </script>

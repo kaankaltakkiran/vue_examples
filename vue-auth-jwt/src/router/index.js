@@ -7,8 +7,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-   /*  belirli bir yolun kullanıcı oturumu gerektirip gerektirmediğini belirlemek için kullanılır. */
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true } // bu sayfayı sadece oturumu olan kullanıcılar görebilir
   },
   {
     path: '/login',
@@ -22,8 +21,7 @@ const router = createRouter({
   routes
 });
 
-/* kullanıcı oturumu gerektirip gerektirmediğini belirlemek için kullanılır. */
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => { // Bu kod parçası, kullanıcı oturumu olup olmadığını kontrol eder ve gerekirse kullanıcıyı giriş sayfasına yönlendirir.
   const publicPages = ['/login'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
@@ -31,7 +29,6 @@ router.beforeEach((to, from, next) => {
   if (authRequired && !loggedIn) {
     return next('/login');
   }
-
   next();
 });
 
